@@ -1,19 +1,15 @@
-<%@ page contentType="text/html; ISO-8859-1" language="java"%>
-
 <html>
-<title>Home page</title>
 <body>
-<p>
-    ${error}
-</p>
-<p>
+<h2>Login</h2>
+<p>${error}</p>
 <form action="/login" method="post">
-
-    <input type="text" placeholder="Enter Username" name="username" required><br>
-    <input type="password" placeholder="Enter Password" name="password" required><br>
-    <button type="submit">Login</button>
-
+    Username:<br/>
+    <input type="text" name="username"/>
+    <br/>
+    Password:<br/>
+    <input type="password" name="password">
+    <br><br>
+    <input type="submit" value="Submit">
 </form>
-</p>
 </body>
 </html>
