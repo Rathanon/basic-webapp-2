@@ -7,7 +7,7 @@ public class ConfigurationLoader {
 
     // static method for loading config from disk
     // default Location: config.properties (same folder)
-    public static void load(){
+    public static ConfigProperties load(){
         String configFileName = "config.properties";
         try(FileInputStream fin = new FileInputStream(configFileName)) {
             Properties prop = new Properties();
@@ -17,18 +17,15 @@ public class ConfigurationLoader {
             String connectionUrl = prop.getProperty("database.connectionUrl");
             String username = prop.getProperty("database.username");
             String password = prop.getProperty("database.password");
+            return new ConfigProperties.ConfigPropertiesBuilder()
+                    .databaseDriverClassName(driverClassName)
+                    .databaseConnectionUrl(connectionUrl)
+                    .databaseUsername(username)
+                    .databasePassword(password)
+                    .build();
 
-            System.out.println(driverClassName);
-            System.out.println(connectionUrl);
-            System.out.println(username);
-            System.out.println(password);
         } catch (Exception e) {
-            System.out.println("Exception: " + e);
+            return null;
         }
-
-    }
-
-    public static void main(String[] args) {
-        load();
     }
 }
