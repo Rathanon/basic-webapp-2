@@ -1,17 +1,16 @@
 package io.muic.ooc.webapp.service;
 
 
+import io.muic.ooc.webapp.model.User;
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.*;
 
 
 public class UserService {
 
     private static final String INSERT_USER_SQL = "INSERT INTO tbl_user(username, password, display_name) VALUES (?, ?, ?);";
+    private static final String SELECT_USER_SQL = "SELECT * FROM tbl_user WHERE username = ?;";
 
 
     private DatabaseConnectionService databaseConnectionService;
@@ -39,6 +38,34 @@ public class UserService {
             throw new UserServiceException(throwables.getMessage());
         }
     }
+    // find user by username
+    public User findByUsername(String username) {
+        try {
+            Connection connection = databaseConnectionService.getConnection();
+            PreparedStatement ps = connection.prepareStatement(SELECT_USER_SQL);
+            ps.setString(1, username);
+            ResultSet resultSet = ps.executeQuery();
+            resultSet.next();
+            return new User(
+                    resultSet.getLong("id"),
+                    resultSet.getString("username"),
+                    resultSet.getString("password"),
+                    resultSet.getString("display_Name")
+            );
+        }  catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void main(String[] args) {
+        UserService userService = new UserService();
+        userService.setDatabaseConnectionService(new DatabaseConnectionService());
+        User user = userService.findByUsername("mansahej");
+        System.out.println(user.getUsername());
+
+    }
+
 
 }
 
