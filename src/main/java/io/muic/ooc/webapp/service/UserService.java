@@ -90,6 +90,35 @@ public class UserService {
     }
 
 
+    // delete user
+    public void deleteUserByUsername(){
+
+    }
+
+    // update user
+
+    /**
+     * User can only change their display name when updating profile.
+     * @param id
+     * @param displayName
+     */
+    public void updateUserById(long id, String displayName ){
+
+    }
+
+    /**
+     * Change password method is not in update method
+     * @param newPassword
+     */
+    public void changePassword(String newPassword){
+        throw new UnsupportedOperationException("not yet implemented");
+
+    }
+
+
+
+
+
     public static void main(String[] args) {
         UserService userService = new UserService();
         userService.setDatabaseConnectionService(new DatabaseConnectionService());
