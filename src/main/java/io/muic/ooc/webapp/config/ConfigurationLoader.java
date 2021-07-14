@@ -13,12 +13,10 @@ public class ConfigurationLoader {
             Properties prop = new Properties();
             prop.load(fin);
             // get the property value and print it out
-            String user = prop.getProperty("user");
-            String driverClassName = prop.getProperty("database.driverClassName ");
+            String driverClassName = prop.getProperty("database.driverClassName");
             String connectionUrl = prop.getProperty("database.connectionUrl");
             String username = prop.getProperty("database.username");
             String password = prop.getProperty("database.password");
-
 
             System.out.println(driverClassName);
             System.out.println(connectionUrl);
@@ -28,5 +26,9 @@ public class ConfigurationLoader {
             System.out.println("Exception: " + e);
         }
 
+    }
+
+    public static void main(String[] args) {
+        load();
     }
 }
