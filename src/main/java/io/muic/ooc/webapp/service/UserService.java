@@ -5,13 +5,15 @@ import io.muic.ooc.webapp.model.User;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class UserService {
 
     private static final String INSERT_USER_SQL = "INSERT INTO tbl_user(username, password, display_name) VALUES (?, ?, ?);";
     private static final String SELECT_USER_SQL = "SELECT * FROM tbl_user WHERE username = ?;";
-
+    private static final String SELECT_ALL_USER_SQL = "SELECT * FROM tbl_user;";
 
     private DatabaseConnectionService databaseConnectionService;
 
@@ -38,6 +40,7 @@ public class UserService {
             throw new UserServiceException(throwables.getMessage());
         }
     }
+
     // find user by username
     public User findByUsername(String username) {
         try {
@@ -52,20 +55,49 @@ public class UserService {
                     resultSet.getString("password"),
                     resultSet.getString("display_Name")
             );
-        }  catch (SQLException throwables) {
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
             return null;
         }
     }
 
+    // list users
+
+    /**
+     * list all users in the database
+     *
+     * @return list of users, never return null
+     */
+    public List<User> findALl() {
+        List<User> users = new ArrayList<>();
+        try {
+            Connection connection = databaseConnectionService.getConnection();
+            PreparedStatement ps = connection.prepareStatement(SELECT_ALL_USER_SQL);
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                users.add(new User(
+                                resultSet.getLong("id"),
+                                resultSet.getString("username"),
+                                resultSet.getString("password"),
+                                resultSet.getString("display_Name")
+                        )
+                );
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return users;
+    }
+
+
     public static void main(String[] args) {
         UserService userService = new UserService();
         userService.setDatabaseConnectionService(new DatabaseConnectionService());
-        User user = userService.findByUsername("mansahej");
-        System.out.println(user.getUsername());
-
+        List<User> users = userService.findALl();
+        for (User user : users) {
+            System.out.println(user.getUsername());
+        }
     }
-
 
 }
 
