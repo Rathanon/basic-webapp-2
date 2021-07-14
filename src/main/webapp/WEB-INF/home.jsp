@@ -13,8 +13,16 @@
 
 </head>
 <body>
-<div class="container mt-4">
-    <h3 class="my-4">Welcome ${username}</h3>
+<div class="container ">
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand">SSC - Login Webapp</a>
+            <a class="btn btn-light pull-right" type="button" href="/logout">
+                <i class="fa fa-sign-out"></i>&nbsp; Logout</a>
+
+        </div>
+    </nav>
+    <h3 class="my-4">Welcome, ${username}</h3>
     <table class="table table-striped table-bordered">
         <thead>
         <tr>
@@ -31,7 +39,8 @@
                 <td class="py-3">${user.id}</td>
                 <td class="py-3">${user.username}</td>
                 <td class="py-3">${user.displayName}</td>
-                <td> <button class="btn btn-warning btn-sm" type="button"><i class="fa fa-pencil"></i></button>
+                <td class="align-middle">
+                    <button class="btn btn-warning btn-sm" type="button"><i class="fa fa-pencil"></i></button>
                     <button class="btn btn-danger btn-sm" type="button"><i class="fa fa-trash"></i></button>
                 </td>
             </tr>
