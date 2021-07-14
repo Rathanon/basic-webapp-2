@@ -7,9 +7,17 @@ import io.muic.ooc.webapp.config.ConfigurationLoader;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Make this singleton
+ */
+
 public class DatabaseConnectionService {
 
+    private static DatabaseConnectionService service;
+
     private final HikariDataSource ds;
+
+
 
     /**
      * Database connection pool using hikari library
@@ -17,7 +25,7 @@ public class DatabaseConnectionService {
      * config.properties is not committed to git repository
      */
 
-    public DatabaseConnectionService() {
+    private DatabaseConnectionService() {
         ds = new HikariDataSource();
         ds.setMaximumPoolSize(20);
         ConfigProperties configProperties = ConfigurationLoader.load();
@@ -35,33 +43,12 @@ public class DatabaseConnectionService {
         return ds.getConnection();
     }
 
-//    public static void main(String[] args) {
-//        final HikariDataSource ds = new HikariDataSource();
-//        ds.setMaximumPoolSize(20);
-//        ds.setDriverClassName("org.mariadb.jdbc.Driver");
-//        ds.setJdbcUrl("jdbc:mariadb://localhost:3306/login_webapp");
-//        ds.addDataSourceProperty("user", "mansahej");
-//        ds.addDataSourceProperty("password", "mansahej20");
-//        ds.setAutoCommit(false);
-//
-//
-//        try {
-//            Connection connection = ds.getConnection();
-//            String sql = "INSERT INTO tbl_user(username, password, display_name) VALUES (?, ?, ?);";
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            // setting username column
-//            ps.setString(1, "my_username");
-//            // setting password column
-//            ps.setString(2, "my_password");
-//            // setting display name column
-//            ps.setString(3, "my_display_name");
-//            ps.executeUpdate();
-//            //manually commit the change
-//            connection.commit();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
+    public static DatabaseConnectionService getInstance(){
+        if (service == null){
+            service = new DatabaseConnectionService();
+        }
+        return service;
+    }
+
 
 }

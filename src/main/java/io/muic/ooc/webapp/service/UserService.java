@@ -8,6 +8,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Make user service singleton
+ */
 
 public class UserService {
 
@@ -15,7 +18,21 @@ public class UserService {
     private static final String SELECT_USER_SQL = "SELECT * FROM tbl_user WHERE username = ?;";
     private static final String SELECT_ALL_USER_SQL = "SELECT * FROM tbl_user;";
 
+    private static UserService service;
+
     private DatabaseConnectionService databaseConnectionService;
+
+
+    private UserService(){
+    }
+
+    public static UserService getInstance() {
+        if (service == null){
+            service = new UserService();
+            service.setDatabaseConnectionService(DatabaseConnectionService.getInstance());
+        }
+        return service;
+    }
 
     public void setDatabaseConnectionService(DatabaseConnectionService databaseConnectionService) {
         this.databaseConnectionService = databaseConnectionService;
@@ -118,14 +135,17 @@ public class UserService {
 
 
 
-
     public static void main(String[] args) {
-        UserService userService = new UserService();
-        userService.setDatabaseConnectionService(new DatabaseConnectionService());
-        List<User> users = userService.findALl();
-        for (User user : users) {
-            System.out.println(user.getUsername());
+        UserService userService = UserService.getInstance();
+        try {
+            userService.createUser("admin", "12345","Admin");
+        } catch (UserServiceException e) {
+            e.printStackTrace();
         }
+//        List<User> users = userService.findALl();
+//        for (User user : users) {
+//            System.out.println(user.getUsername());
+//        }
     }
 
 }
