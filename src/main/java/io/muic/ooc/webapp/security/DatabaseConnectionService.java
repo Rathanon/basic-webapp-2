@@ -12,6 +12,12 @@ public class DatabaseConnectionService {
 
     private final HikariDataSource ds;
 
+    /**
+     * Database connection pool using hikari library
+     * The secret and variables are loaded from disk
+     * config.properties is not committed to git repository
+     */
+
     public DatabaseConnectionService() {
         ds = new HikariDataSource();
         ds.setMaximumPoolSize(20);
