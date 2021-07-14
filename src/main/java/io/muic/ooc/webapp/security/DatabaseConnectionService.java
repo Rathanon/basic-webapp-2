@@ -6,7 +6,24 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class TestDatabaseConnection {
+public class DatabaseConnectionService {
+
+    final HikariDataSource ds;
+
+    public DatabaseConnectionService() {
+        ds = new HikariDataSource();
+        final HikariDataSource ds = new HikariDataSource();
+        ds.setMaximumPoolSize(20);
+
+        // TODO : hard coded, not convenient, insecure
+        // change to use configuration file or environment variable
+        ds.setDriverClassName("org.mariadb.jdbc.Driver");
+        ds.setJdbcUrl("jdbc:mariadb://localhost:3306/login_webapp");
+        ds.addDataSourceProperty("user", "mansahej");
+        ds.addDataSourceProperty("password", "mansahej20");
+        ds.setAutoCommit(false);
+    }
+
     public static void main(String[] args) {
         final HikariDataSource ds = new HikariDataSource();
         ds.setMaximumPoolSize(20);
