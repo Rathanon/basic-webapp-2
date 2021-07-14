@@ -17,12 +17,15 @@ public class ConfigurationLoader {
             String connectionUrl = prop.getProperty("database.connectionUrl");
             String username = prop.getProperty("database.username");
             String password = prop.getProperty("database.password");
-            return new ConfigProperties.ConfigPropertiesBuilder()
-                    .databaseDriverClassName(driverClassName)
-                    .databaseConnectionUrl(connectionUrl)
-                    .databaseUsername(username)
-                    .databasePassword(password)
-                    .build();
+
+
+            ConfigProperties cp = new ConfigProperties();
+            cp.setDatabaseDriverClassName(driverClassName);
+            cp.setDatabaseConnectionUrl(connectionUrl);
+            cp.setDatabaseUsername(username);
+            cp.setDatabasePassword(password);
+
+            return cp;
 
         } catch (Exception e) {
             return null;

@@ -1,11 +1,10 @@
-package io.muic.ooc.webapp.security;
+package io.muic.ooc.webapp.service;
 
 import com.zaxxer.hikari.HikariDataSource;
 import io.muic.ooc.webapp.config.ConfigProperties;
 import io.muic.ooc.webapp.config.ConfigurationLoader;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DatabaseConnectionService {
