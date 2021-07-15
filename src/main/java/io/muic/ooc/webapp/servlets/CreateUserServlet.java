@@ -77,6 +77,10 @@ public class CreateUserServlet extends HttpServlet implements Routable {
 
             }
                     // Password
+            else  if(StringUtils.isBlank(password)) {
+                // cannot be blank
+                errorMessage = "Password cannot be blank.";
+            }
             if(!StringUtils.equals(password,cpassword)){
                 // password not same
                 errorMessage = "Passwords do not match";
