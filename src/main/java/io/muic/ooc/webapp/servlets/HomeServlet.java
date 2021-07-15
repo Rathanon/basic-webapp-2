@@ -39,13 +39,19 @@ public class HomeServlet extends HttpServlet implements Routable {
             String username = (String) request.getSession().getAttribute("username");
             UserService userService = UserService.getInstance();
 
-
             request.setAttribute("currentUser", userService.findByUsername(username));
             request.setAttribute("users", userService.findALl());
 
             RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/home.jsp");
             rd.include(request, response);
+
+            //removes attributes after they are used( flash session)
+            request.removeAttribute("hasError");
+            request.removeAttribute("message");
         } else {
+            //add for precaution to delete attributes
+            request.removeAttribute("hasError");
+            request.removeAttribute("message");
             response.sendRedirect("/login");
         }
     }
