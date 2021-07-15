@@ -1,6 +1,7 @@
 package io.muic.ooc.webapp.servlets;
 
 import io.muic.ooc.webapp.Routable;
+import io.muic.ooc.webapp.model.User;
 import io.muic.ooc.webapp.service.SecurityService;
 import io.muic.ooc.webapp.service.UserService;
 import org.apache.commons.lang.StringUtils;
@@ -12,13 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class CreateUserServlet extends HttpServlet implements Routable {
+public class EditUserServlet extends HttpServlet implements Routable {
 
     private SecurityService securityService;
 
 
     @Override
-    public String getMapping() { return "/user/create";
+    public String getMapping() { return "/user/edit";
     }
 
     @Override
@@ -30,13 +31,17 @@ public class CreateUserServlet extends HttpServlet implements Routable {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         boolean authorized = securityService.isAuthorized(request);
         if (authorized) {
-            // do MVC in here
-//            String username = (String) request.getSession().getAttribute("username");
-//            UserService userService = UserService.getInstance();
+            String username = StringUtils.trim((String)request.getParameter("username")); // from query part
+            UserService userService = UserService.getInstance();
 
-//            request.setAttribute("user", userService.findByUsername(username));
+            // prefill
+            User user = userService.findByUsername(username);
+            request.setAttribute("user", user);
+            request.setAttribute("username", user.getUsername());
+            request.setAttribute("displayName", user.getDisplayName());
 
-            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/create.jsp");
+            //if cannot create
+            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/edit.jsp");
             rd.include(request, response);
 
             //removes attributes after they are used( flash session)
@@ -55,43 +60,37 @@ public class CreateUserServlet extends HttpServlet implements Routable {
         boolean authorized = securityService.isAuthorized(request);
 
         if (authorized) {
-
+            //edit user is similar to create used, but we only allow editing display name
             // ensure username and displayName do not contain leading and trailing spaces
-            String username = StringUtils.trim((String)request.getParameter("username"));
+            String username = StringUtils.trim((String)request.getParameter("username")); // from query part
             String displayName = StringUtils.trim((String)request.getParameter("displayName"));
-            String password = (String)request.getParameter("password");
-            String cpassword = (String)request.getParameter("cpassword");
 
             UserService userService = UserService.getInstance();
+            User user = userService.findByUsername(username);
+
             String errorMessage = null;
             // validity
-                    // Username
-            if(userService.findByUsername(username) != null){
+                    // existence
+          // Display Name
+            if(user == null){
                 // exists
-                errorMessage = String.format("Username %s has already been taken.", username);
+                errorMessage = String.format("User %s does not exist.", username);
             }
-                    // Display Name
-            else if(StringUtils.isBlank(displayName)){
-                // cannot be blank
-                errorMessage = " Display name cannot be blank.";
-
-            }
-                    // Password
-            if(!StringUtils.equals(password,cpassword)){
-                // password not same
-                errorMessage = "Passwords do not match";
-            }
+            else  if(StringUtils.isBlank(displayName)) {
+            // cannot be blank
+            errorMessage = "Display Name cannot be blank.";
+        }
 
             if(errorMessage != null){
                 request.getSession().setAttribute("hasError", true);
                 request.getSession().setAttribute("message",errorMessage);
             }else{
-                // create a user
+                // edit a user
                 try{
-                    userService.createUser(username, password, displayName);
+                    userService.updateUserByUsername(username, displayName);
                     // if no error redirect
                     request.getSession().setAttribute("hasError", false);
-                    request.getSession().setAttribute("message",String.format("User %s has successfully been created.", username));
+                    request.getSession().setAttribute("message",String.format("User %s has successfully been updated.", username));
                     response.sendRedirect("/");
                     return;
                 } catch(Exception e){
@@ -103,11 +102,8 @@ public class CreateUserServlet extends HttpServlet implements Routable {
             // prefill
             request.setAttribute("username", username);
             request.setAttribute("displayName", displayName);
-            request.setAttribute("password", password);
-            request.setAttribute("cpassword", cpassword);
-
             //if cannot create
-            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/create.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/edit.jsp");
             rd.include(request, response);
 
             //removes attributes after they are used( flash session)
