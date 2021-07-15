@@ -20,13 +20,13 @@
                     <span class="input-group-text" id="username" style="width: 40px">
                         <i class="fa fa-user"></i>
                     </span>
-                    <input type="text" class="form-control" name ="username" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+                    <input type="text" class="form-control" name ="username" placeholder="Username" aria-label="Username" aria-describedby="username">
                 </div>
                 <div class="input-group mb-4 input-group-md">
                     <span class="input-group-text" id="password" style="width: 40px">
                         <i class="fa fa-key"></i>
                     </span>
-                    <input type="password" class="form-control" name ="password" type="password" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
+                    <input type="password" class="form-control" name ="password" type="password" placeholder="Password" aria-label="Password" aria-describedby="passord">
                 </div>
                 <div class="d-grid gap-2">
                 <button class="btn btn-primary d-blocked" type ="submit"><i class="fa fa-sign-in"></i>&nbsp; Login</button>
