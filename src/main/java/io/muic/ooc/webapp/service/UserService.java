@@ -153,6 +153,7 @@ public class UserService {
 
     /**
      * Change password method is not in update method
+     *
      * @param newPassword
      */
     public void changePassword(String newPassword){

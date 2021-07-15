@@ -1,29 +1,23 @@
 package io.muic.ooc.webapp.servlets;
 
 import io.muic.ooc.webapp.Routable;
-import io.muic.ooc.webapp.model.User;
 import io.muic.ooc.webapp.service.SecurityService;
 import io.muic.ooc.webapp.service.UserService;
 
-import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-/**
- *
- * @author gigadot
- */
-public class HomeServlet extends HttpServlet implements Routable {
+public class CreateUserServlet extends HttpServlet implements Routable {
 
     private SecurityService securityService;
 
 
     @Override
-    public String getMapping() {
-        return "/index.jsp";
+    public String getMapping() { return "/user/create";
     }
 
     @Override
@@ -40,11 +34,11 @@ public class HomeServlet extends HttpServlet implements Routable {
             UserService userService = UserService.getInstance();
 
 
-            request.setAttribute("currentUser", userService.findByUsername(username));
-            request.setAttribute("users", userService.findALl());
+            request.setAttribute("user", userService.findByUsername(username));
 
-            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/home.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/create.jsp");
             rd.include(request, response);
+
 
 
             //removes attributes after they are used( flash session)

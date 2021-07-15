@@ -5,11 +5,8 @@
  */
 package io.muic.ooc.webapp;
 
-import io.muic.ooc.webapp.servlets.DeleteUserServlet;
-import io.muic.ooc.webapp.servlets.HomeServlet;
+import io.muic.ooc.webapp.servlets.*;
 import io.muic.ooc.webapp.service.SecurityService;
-import io.muic.ooc.webapp.servlets.LoginServlet;
-import io.muic.ooc.webapp.servlets.LogoutServlet;
 import org.apache.catalina.Context;
 import org.apache.catalina.startup.Tomcat;
 
@@ -28,6 +25,7 @@ public class ServletRouter {
     static {
         routables.add(HomeServlet.class);
         routables.add(DeleteUserServlet.class);
+        routables.add(CreateUserServlet.class);
         routables.add(LoginServlet.class);
         routables.add(LogoutServlet.class);
 
