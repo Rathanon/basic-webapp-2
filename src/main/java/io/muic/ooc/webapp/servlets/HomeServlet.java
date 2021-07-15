@@ -1,6 +1,7 @@
 package io.muic.ooc.webapp.servlets;
 
 import io.muic.ooc.webapp.Routable;
+import io.muic.ooc.webapp.model.User;
 import io.muic.ooc.webapp.service.SecurityService;
 import io.muic.ooc.webapp.service.UserService;
 
@@ -36,9 +37,10 @@ public class HomeServlet extends HttpServlet implements Routable {
         if (authorized) {
             // do MVC in here
             String username = (String) request.getSession().getAttribute("username");
-            request.setAttribute("username", username);
-
             UserService userService = UserService.getInstance();
+
+
+            request.setAttribute("currentUser", userService.findByUsername(username));
             request.setAttribute("users", userService.findALl());
 
             RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/home.jsp");
