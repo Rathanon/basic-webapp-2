@@ -4,6 +4,7 @@ import io.muic.ooc.webapp.Routable;
 import io.muic.ooc.webapp.model.User;
 import io.muic.ooc.webapp.service.SecurityService;
 import io.muic.ooc.webapp.service.UserService;
+import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -41,20 +42,27 @@ public class DeleteUserServlet extends HttpServlet implements Routable {
                 User currentUser = userService.findByUsername(username);
                 //delete user by user username
                 User deletingUser = userService.findByUsername(request.getParameter("username"));
-                if(userService.deleteUserByUsername(deletingUser.getUsername())){
-                    //go to user list page with successfully deleted message
-                    //error message in session
-                    //attributes added to persist unless removed from session
-                    // ensure that they are deleted then they are read next time
-
-                    request.getSession().setAttribute("hasError", false);
-                    request.getSession().setAttribute("message",String.format("User %s is deleted", deletingUser.getUsername()));
-                } else{
-                    // go to user list page with error message
+                //prevent deleting own account. user cannot do from ui but can request server
+                if(StringUtils.equals(currentUser.getUsername(),deletingUser.getUsername())){
                     request.getSession().setAttribute("hasError", true);
-                    request.getSession().setAttribute("message",String.format("Unable to delete user%s", deletingUser.getUsername()));
+                    request.getSession().setAttribute("message","You cannot delete your own account");
+                } else{
+                    if(userService.deleteUserByUsername(deletingUser.getUsername())){
+                        //go to user list page with successfully deleted message
+                        //error message in session
+                        //attributes added to persist unless removed from session
+                        // ensure that they are deleted then they are read next time
 
+                        request.getSession().setAttribute("hasError", false);
+                        request.getSession().setAttribute("message",String.format("User %s is deleted", deletingUser.getUsername()));
+                    } else{
+                        // go to user list page with error message
+                        request.getSession().setAttribute("hasError", true);
+                        request.getSession().setAttribute("message",String.format("Unable to delete user%s", deletingUser.getUsername()));
+
+                    }
                 }
+
             } catch (Exception e){
                 // go to user list page with error message
                 request.getSession().setAttribute("hasError", true);
